@@ -1,6 +1,6 @@
 {
-  "name": "react-native-rsa-oaep",
-  "version": "0.1.0",
+  "name": "@taronk/react-native-rsa-oaep",
+  "version": "1.0.0",
   "description": "React Native RSA-OAEP (SHA-256) encryption/decryption for iOS and Android. Compatible with Node.js crypto.privateDecrypt.",
   "main": "src/index.js",
   "react-native": "src/index.js",
@@ -37,6 +37,7 @@
     "ios/",
     "android/",
     "react-native-rsa-oaep.podspec",
+    "react-native.config.js",
     "README.md",
     "LICENSE"
   ],

@@ -5,9 +5,6 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import org.spongycastle.asn1.pkcs.RSAPublicKey
-import org.spongycastle.openssl.PEMParser
-import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter
 import java.io.StringReader
 import java.nio.charset.StandardCharsets
 import java.security.KeyFactory
@@ -17,6 +14,12 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
+
+import org.spongycastle.asn1.pkcs.RSAPublicKey
+import org.spongycastle.asn1.x509.SubjectPublicKeyInfo
+import org.spongycastle.cert.X509CertificateHolder
+import org.spongycastle.openssl.PEMParser
+import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter
 
 /**
  * React Native RSA-OAEP (SHA-256) module.
@@ -43,17 +46,31 @@ class RsaOaepModule(reactContext: ReactApplicationContext) :
 
   private fun loadPublicKey(pem: String): PublicKey {
     val der = pemToDer(pem)
-    return try {
+    // 1) Try X.509 SPKI from raw DER (most PUBLIC KEY PEMs)
+    try {
       val spec = X509EncodedKeySpec(der)
-      KeyFactory.getInstance("RSA").generatePublic(spec)
+      return KeyFactory.getInstance("RSA").generatePublic(spec)
     } catch (_: Exception) {
-      val obj = PEMParser(StringReader(pem)).use { it.readObject() }
-      when (obj) {
-        is RSAPublicKey -> {
-          val spec = RSAPublicKeySpec(obj.modulus, obj.publicExponent)
-          KeyFactory.getInstance("RSA").generatePublic(spec)
-        }
-        else -> throw IllegalArgumentException("Unsupported public key format. Use PKCS#1 (RSA PUBLIC KEY) or X.509 (PUBLIC KEY).")
+      // fall through to PEMParser
+    }
+    // 2) Try parsing full PEM (handles CERTIFICATE, RSA PUBLIC KEY, etc.)
+    val obj = PEMParser(StringReader(pem)).use { it.readObject() }
+    val converter = JcaPEMKeyConverter() // no provider override
+    return when (obj) {
+      is RSAPublicKey -> {
+        val spec = RSAPublicKeySpec(obj.modulus, obj.publicExponent)
+        KeyFactory.getInstance("RSA").generatePublic(spec)
+      }
+      is SubjectPublicKeyInfo -> {
+        converter.getPublicKey(obj)
+      }
+      is X509CertificateHolder -> {
+        converter.getPublicKey(obj.subjectPublicKeyInfo)
+      }
+      else -> {
+        throw IllegalArgumentException(
+          "Unsupported public key format. Expected CERTIFICATE, RSA PUBLIC KEY or PUBLIC KEY."
+        )
       }
     }
   }
@@ -67,7 +84,7 @@ class RsaOaepModule(reactContext: ReactApplicationContext) :
       val obj = PEMParser(StringReader(pem)).use { it.readObject() }
       when (obj) {
         is org.spongycastle.openssl.PEMKeyPair -> {
-          JcaPEMKeyConverter().setProvider("SC").getKeyPair(obj).private
+          JcaPEMKeyConverter().getKeyPair(obj).private
         }
         else -> throw IllegalArgumentException("Unsupported private key format. Use PKCS#1 (RSA PRIVATE KEY) or PKCS#8 (PRIVATE KEY).")
       }
