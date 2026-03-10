@@ -1,0 +1,46 @@
+{
+  "name": "react-native-rsa-oaep",
+  "version": "0.1.0",
+  "description": "React Native RSA-OAEP (SHA-256) encryption/decryption for iOS and Android. Compatible with Node.js crypto.privateDecrypt.",
+  "main": "src/index.js",
+  "react-native": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "react-native",
+    "rsa",
+    "oaep",
+    "sha256",
+    "crypto",
+    "encryption",
+    "decryption",
+    "ios",
+    "android"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/react-native-rsa-oaep.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/react-native-rsa-oaep/issues"
+  },
+  "homepage": "https://github.com/your-org/react-native-rsa-oaep#readme",
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "src/",
+    "ios/",
+    "android/",
+    "react-native-rsa-oaep.podspec",
+    "README.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "react-native": ">=0.68.0"
+  }
+}

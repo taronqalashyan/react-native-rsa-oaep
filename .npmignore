@@ -1,0 +1,25 @@
+# Development
+.git
+.gitignore
+*.log
+.DS_Store
+node_modules
+*.tgz
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Tests (if added later)
+__tests__
+*.test.js
+*.spec.js
+coverage
+.jest
+
+# Build artifacts
+*.tsbuildinfo
+dist
+build
