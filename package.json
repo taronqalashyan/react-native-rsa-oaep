@@ -19,16 +19,16 @@
     "ios",
     "android"
   ],
-  "author": "",
+  "author": "Taron Kalashyan",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/react-native-rsa-oaep.git"
+    "url": "https://github.com/taronqalashyan/react-native-rsa-oaep.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/react-native-rsa-oaep/issues"
+    "url": "https://github.com/taronqalashyan/react-native-rsa-oaep/issues"
   },
-  "homepage": "https://github.com/your-org/react-native-rsa-oaep#readme",
+  "homepage": "https://github.com/taronqalashyan/react-native-rsa-oaep#readme",
   "engines": {
     "node": ">=14"
   },

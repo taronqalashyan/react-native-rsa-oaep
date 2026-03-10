@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.description  = package["description"]
   s.license      = "MIT"
   s.homepage     = package["homepage"]
-  s.authors      = package["author"] || "Author"
-  s.source       = { :git => package["repository"]["url"], :tag => "v#{s.version}" }
+  s.authors      = "Taron Qalashyan"
+  s.source       = { :git => "https://github.com/taronqalashyan/react-native-rsa-oaep.git", :tag => "v#{s.version}" }
   s.platforms    = { :ios => "11.0" }
   s.source_files = "ios/**/*.{h,m,mm,swift}"
   s.requires_arc = true
